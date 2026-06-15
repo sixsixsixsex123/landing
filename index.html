@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Репетитор по математике · ОГЭ и ЕГЭ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F7FB;
+    --card:#FFFFFF;
+    --ink:#16223D;
+    --ink-soft:#5C6B85;
+    --primary:#2B44C7;
+    --primary-deep:#1E2F8F;
+    --grid:#DCE6F4;
+    --grid-strong:#C6D5EE;
+    --mark:#FFD84D;       /* маркер-выделитель */
+    --rise:#1FA971;       /* рост баллов */
+    --radius:18px;
+    --maxw:1120px;
+    --display:'Unbounded',system-ui,sans-serif;
+    --body:'Manrope',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    color:var(--ink);
+    background-color:var(--paper);
+    /* фон «в клетку» как в тетради */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:26px 26px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--primary);
+    font-weight:500;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- Кнопки ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--body);font-weight:700;font-size:15px;
+    padding:14px 26px;border-radius:999px;cursor:pointer;border:2px solid transparent;
+    transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 22px rgba(43,68,199,.25)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(43,68,199,.34)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--grid-strong)}
+  .btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+
+  /* ---------- Шапка ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:saturate(180%) blur(10px);
+    background:rgba(244,247,251,.82);
+    border-bottom:1px solid var(--grid);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:17px}
+  .monogram{
+    height:38px;padding:0 11px;border-radius:11px;background:var(--ink);color:var(--mark);
+    display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;
+    font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.02em;
+    box-shadow:inset 0 0 0 2px rgba(255,216,77,.22);
+  }
+  .nav-links{display:flex;gap:30px;font-size:15px;font-weight:600;color:var(--ink-soft)}
+  .nav-links a:hover{color:var(--primary)}
+  .nav-cta{display:flex;align-items:center;gap:18px}
+  .burger{display:none}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:84px 0 64px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .hero h1{
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(34px,5vw,58px);line-height:1.04;letter-spacing:-.02em;
+    margin:18px 0 22px;
+  }
+  .hero h1 .hl{
+    background:var(--mark);
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+    padding:0 .12em;
+    border-radius:5px;
+  }
+  .hero p.lead{font-size:18px;color:var(--ink-soft);max-width:520px;margin-bottom:32px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+
+  /* визуал героя: координатная плоскость с растущей кривой */
+  .hero-card{
+    background:var(--card);border-radius:var(--radius);
+    border:1px solid var(--grid);
+    box-shadow:0 24px 60px rgba(22,34,61,.10);
+    padding:26px;position:relative;
+  }
+  .hero-card .tag{
+    position:absolute;top:-14px;right:22px;
+    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;
+    background:var(--ink);color:var(--mark);padding:7px 12px;border-radius:8px;
+  }
+  .hero-card h3{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.04em}
+
+  /* ---------- Полоса фактов ---------- */
+  .stats{border-top:1px solid var(--grid);border-bottom:1px solid var(--grid);background:rgba(255,255,255,.5)}
+  .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .stat{padding:30px 24px;text-align:center;border-right:1px solid var(--grid)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:var(--display);font-weight:700;font-size:40px;color:var(--primary);line-height:1}
+  .stat .lbl{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+  /* ---------- Секции ---------- */
+  section{padding:80px 0}
+  .sec-head{max-width:640px;margin-bottom:46px}
+  .sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.01em;margin:14px 0 12px;line-height:1.1}
+  .sec-head p{font-size:17px;color:var(--ink-soft)}
+
+  /* Программы: ОГЭ и ЕГЭ наравне */
+  .programs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .prog{
+    background:var(--card);border:1px solid var(--grid);border-radius:var(--radius);
+    padding:34px;position:relative;overflow:hidden;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .prog:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(22,34,61,.10)}
+  .prog::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--primary)}
+  .prog.ege::before{background:var(--ink)}
+  .prog .kicker{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary)}
+  .prog.ege .kicker{color:var(--ink)}
+  .prog h3{font-family:var(--display);font-weight:700;font-size:26px;margin:10px 0 6px}
+  .prog .who{color:var(--ink-soft);font-size:15px;margin-bottom:20px}
+  .prog ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+  .prog li{display:flex;gap:11px;font-size:15px;align-items:flex-start}
+  .prog li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:5px;background:#CBD3DF;box-shadow:inset 0 0 0 2px rgba(22,34,61,.10)}
+  .prog .goal{font-size:14px;font-weight:600;border-top:1px dashed var(--grid-strong);padding-top:16px;color:var(--ink)}
+
+  /* Результаты — фирменный блок с графиками */
+  #results{background:linear-gradient(180deg,transparent,rgba(255,255,255,.55))}
+  .cases{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .case svg{margin:18px 0 8px}
+  .case{
+    background:var(--card);border:1px solid var(--grid);border-radius:var(--radius);
+    padding:24px;
+  }
+  .case .ctype{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase}
+  .case svg{width:100%;height:auto;display:block;margin:14px 0 6px}
+  .case .jump{display:flex;align-items:baseline;gap:10px;font-family:var(--display);font-weight:700}
+  .case .from{font-size:22px;color:var(--ink-soft)}
+  .case .arrow{font-size:18px;color:var(--rise)}
+  .case .to{font-size:34px;color:var(--primary)}
+  .case .meta{font-size:13px;color:var(--ink-soft);margin-top:6px}
+  .note-inline{font-size:13px;color:var(--ink-soft);margin-top:26px;font-family:var(--mono)}
+
+  /* Форматы и цены */
+  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  .price{
+    background:var(--card);border:1px solid var(--grid);border-radius:var(--radius);
+    padding:32px;display:flex;flex-direction:column;
+  }
+  .price.feat{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .price.feat .ink-soft,.price.feat .price-sub{color:#aeb8d0}
+  .price .plan{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);font-weight:700}
+  .price.feat .plan{color:var(--mark)}
+  .price .amount{font-family:var(--display);font-weight:700;font-size:38px;margin:14px 0 2px;line-height:1}
+  .price .amount .old{font-size:22px;color:var(--ink-soft);text-decoration:line-through;text-decoration-color:#B6C0D2;margin-right:8px;font-weight:600}
+  .price.feat .amount .old{color:#9aa6c4;text-decoration-color:#717ea0}
+  .price-sub{font-size:14px;color:var(--ink-soft);margin-bottom:20px}
+  .price ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-size:14px;margin-bottom:24px;flex:1}
+  .price li{display:flex;gap:9px}
+  .price li::before{content:"+";font-family:var(--mono);color:var(--rise);font-weight:700}
+  .price.feat li::before{color:var(--mark)}
+
+  /* Как проходит подготовка — реальная последовательность */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .step{position:relative;padding-top:18px}
+  .step .no{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--primary);letter-spacing:.1em}
+  .step .bar{height:3px;background:var(--grid-strong);margin:10px 0 16px;border-radius:2px;position:relative;overflow:hidden}
+  .step .bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:40%;background:var(--primary)}
+  .step h4{font-family:var(--body);font-weight:700;font-size:17px;margin-bottom:6px}
+  .step p{font-size:14px;color:var(--ink-soft)}
+
+  /* Обо мне */
+  .about{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+  .about-card{
+    background:var(--card);border:1px solid var(--grid);border-radius:var(--radius);
+    padding:30px;box-shadow:0 18px 40px rgba(22,34,61,.07);
+  }
+  .about-card .row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px dashed var(--grid-strong);font-size:15px}
+  .about-card .row:last-child{border-bottom:none}
+  .about-card .row span:first-child{color:var(--ink-soft)}
+  .about-card .row span:last-child{font-weight:600;font-family:var(--mono);font-size:14px}
+  .about-card .row.stack{flex-direction:column;align-items:flex-start;gap:5px}
+  .about-card .row.stack span:last-child{text-align:left;font-size:13px;line-height:1.5}
+  .about h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.4vw,38px);margin:14px 0 18px;line-height:1.1}
+  .about p{color:var(--ink-soft);font-size:16px;margin-bottom:16px;max-width:520px}
+
+  /* Финальный CTA */
+  .final{padding:90px 0}
+  .final-card{
+    background:var(--ink);border-radius:26px;padding:64px 48px;text-align:center;color:#fff;position:relative;overflow:hidden;
+    background-image:
+      linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:26px 26px;
+    background-color:var(--ink);
+  }
+  .final-card h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,4vw,46px);line-height:1.08;margin-bottom:16px}
+  .final-card h2 .hl{background:var(--mark);color:var(--ink);padding:0 .12em;border-radius:5px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .final-card p{color:#c2cbe0;font-size:17px;max-width:520px;margin:0 auto 32px}
+  .final-card .btn-primary{background:var(--mark);color:var(--ink)}
+  .final-card .btn-primary:hover{box-shadow:0 12px 28px rgba(255,216,77,.4)}
+
+  /* Подвал */
+  footer{border-top:1px solid var(--grid);padding:40px 0;font-size:14px;color:var(--ink-soft)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  .foot .legal{font-family:var(--mono);font-size:12.5px}
+
+  /* появление при скролле */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Адаптив ---------- */
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    .programs,.prices,.cases{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .about{grid-template-columns:1fr;gap:30px}
+    .nav-links{display:none}
+    .stats .wrap{grid-template-columns:1fr}
+    .stat{border-right:none;border-bottom:1px solid var(--grid)}
+    .stat:last-child{border-bottom:none}
+  }
+  @media (max-width:520px){
+    .steps{grid-template-columns:1fr}
+    .final-card{padding:44px 24px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="monogram">f(x)</div>
+      <span>Роман Бухаров</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#programs">Программы</a>
+      <a href="#results">Результаты</a>
+      <a href="#prices">Цены</a>
+      <a href="#about">Обо мне</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary">Записаться</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">Математика · ОГЭ и ЕГЭ</span>
+      <h1>Готовлю к <span class="hl">ОГЭ</span> <span class="hl">и</span> <span class="hl">ЕГЭ</span> по математике. От первой диагностики до нужного балла</h1>
+      <p class="lead">Индивидуально и в мини-группах. Начинаем с честной диагностики и плана до экзамена, дальше — системная подготовка с понятным ростом баллов.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Записаться на диагностику</a>
+        <a href="#results" class="btn btn-ghost">Посмотреть результаты</a>
+      </div>
+    </div>
+
+    <div class="hero-card reveal">
+      <div class="tag">РОСТ БАЛЛОВ</div>
+      <h3>от диагностики к экзамену</h3>
+      <svg viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="График роста баллов по месяцам">
+        <!-- горизонтальные линии сетки -->
+        <g stroke="#EAF0F9" stroke-width="1">
+          <line x1="46" y1="161.6" x2="360" y2="161.6"/>
+          <line x1="46" y1="127.2" x2="360" y2="127.2"/>
+          <line x1="46" y1="92.8"  x2="360" y2="92.8"/>
+          <line x1="46" y1="58.4"  x2="360" y2="58.4"/>
+          <line x1="46" y1="24"    x2="360" y2="24"/>
+        </g>
+        <!-- оси -->
+        <g stroke="#C6D5EE" stroke-width="1.5">
+          <line x1="46" y1="24" x2="46" y2="196"/>
+          <line x1="46" y1="196" x2="360" y2="196"/>
+        </g>
+        <!-- подписи оси баллов -->
+        <g font-family="JetBrains Mono" font-size="11" fill="#5C6B85" text-anchor="end">
+          <text x="38" y="200">0</text>
+          <text x="38" y="114">50</text>
+          <text x="38" y="28">100</text>
+        </g>
+        <!-- заливка под линией -->
+        <path d="M64 131 L100 120 L135 110 L171 101 L206 96 L242 86 L277 76 L313 65 L348 58 L348 196 L64 196 Z" fill="#2B44C7" opacity="0.08"/>
+        <!-- линия роста -->
+        <polyline points="64,131 100,120 135,110 171,101 206,96 242,86 277,76 313,65 348,58" fill="none" stroke="#2B44C7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- промежуточные точки -->
+        <g fill="#2B44C7">
+          <circle cx="100" cy="120" r="3"/>
+          <circle cx="135" cy="110" r="3"/>
+          <circle cx="171" cy="101" r="3"/>
+          <circle cx="206" cy="96" r="3"/>
+          <circle cx="242" cy="86" r="3"/>
+          <circle cx="277" cy="76" r="3"/>
+          <circle cx="313" cy="65" r="3"/>
+        </g>
+        <!-- старт и финиш -->
+        <circle cx="64" cy="131" r="5" fill="#fff" stroke="#5C6B85" stroke-width="2.5"/>
+        <circle cx="348" cy="58" r="11" fill="#2B44C7" opacity="0.15"/>
+        <circle cx="348" cy="58" r="5.5" fill="#2B44C7"/>
+        <!-- метка цели -->
+        <rect x="318" y="24" width="42" height="18" rx="6" fill="#16223D"/>
+        <text x="339" y="37" font-family="JetBrains Mono" font-size="12" font-weight="700" fill="#FFD84D" text-anchor="middle">80</text>
+        <!-- подписи месяцев -->
+        <g font-family="JetBrains Mono" font-size="9.5" fill="#5C6B85" text-anchor="middle">
+          <text x="64" y="213">Сен</text>
+          <text x="100" y="213">Окт</text>
+          <text x="135" y="213">Ноя</text>
+          <text x="171" y="213">Дек</text>
+          <text x="206" y="213">Янв</text>
+          <text x="242" y="213">Фев</text>
+          <text x="277" y="213">Мар</text>
+          <text x="313" y="213">Апр</text>
+          <text x="348" y="213">Май</text>
+        </g>
+      </svg>
+      <p style="font-size:13px;color:var(--ink-soft);font-family:var(--mono);margin-top:4px">пример траектории: с 38 до 80 баллов за учебный год</p>
+    </div>
+  </div>
+</section>
+
+<!-- ФАКТЫ -->
+<div class="stats">
+  <div class="wrap">
+    <div class="stat reveal"><div class="num">4 года</div><div class="lbl">преподаю математику</div></div>
+    <div class="stat reveal"><div class="num">170+</div><div class="lbl">учеников подготовлено к экзаменам</div></div>
+    <div class="stat reveal"><div class="num">от 45</div><div class="lbl">средний прирост баллов за год</div></div>
+  </div>
+</div>
+
+<!-- ПРОГРАММЫ -->
+<section id="programs">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Два направления</span>
+      <h2>ОГЭ и ЕГЭ — две отдельные программы под вашу цель</h2>
+      <p>Готовлю и девятиклассников, и одиннадцатиклассников. Программа, темп и материалы подбираются под конкретный экзамен и нужный результат.</p>
+    </div>
+    <div class="programs">
+      <div class="prog reveal">
+        <span class="kicker">9 класс · ОГЭ</span>
+        <h3>Подготовка к ОГЭ</h3>
+        <p class="who">Для тех, кто хочет уверенно сдать и не переживать в июне.</p>
+        <ul>
+          <li>Вся структура экзамена: первая и вторая части</li>
+          <li>Практико-ориентированные задачи (план, шины, тарифы)</li>
+          <li>Геометрия с нуля до второй части</li>
+          <li>Регулярные пробники в формате реального ОГЭ</li>
+        </ul>
+        <p class="goal">Цель: уверенная оценка для аттестата, перехода в 10 класс или поступления в колледж.</p>
+      </div>
+      <div class="prog ege reveal">
+        <span class="kicker">11 класс · ЕГЭ</span>
+        <h3>Подготовка к ЕГЭ</h3>
+        <p class="who">База и профиль. Для тех, кому нужен балл под конкретный вуз.</p>
+        <ul>
+          <li>Первая часть «на автомате» — без обидных потерь</li>
+          <li>Вторая часть: параметры, экономическая задача, стереометрия</li>
+          <li>Разбор типичных ошибок и оформления по критериям</li>
+          <li>Пробники с проверкой как на реальном экзамене</li>
+        </ul>
+        <p class="goal">Цель: нужный балл под выбранный вуз — от порога до 80+.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- РЕЗУЛЬТАТЫ -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Результаты учеников</span>
+      <h2>Главное — рост баллов. Вот как это выглядит</h2>
+      <p>Каждая подготовка начинается с входной диагностики, поэтому прогресс видно по цифрам, а не на словах.</p>
+    </div>
+    <div class="cases">
+      <!-- кейс 1 -->
+      <div class="case reveal">
+        <div class="ctype">ЕГЭ профиль · 10 класс</div>
+        <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg" aria-label="Рост с 34 до 72 баллов по месяцам">
+          <g stroke="#EAF0F9" stroke-width="1">
+            <line x1="34" y1="97.5" x2="262" y2="97.5"/>
+            <line x1="34" y1="71"   x2="262" y2="71"/>
+            <line x1="34" y1="44.5" x2="262" y2="44.5"/>
+          </g>
+          <g stroke="#C6D5EE" stroke-width="1.5">
+            <line x1="34" y1="18" x2="34" y2="124"/>
+            <line x1="34" y1="124" x2="262" y2="124"/>
+          </g>
+          <path d="M52 88 L102 75 L151 56 L200 50 L250 48 L250 124 L52 124 Z" fill="#2B44C7" opacity="0.08"/>
+          <polyline points="52,88 102,75 151,56 200,50 250,48" fill="none" stroke="#2B44C7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#2B44C7"><circle cx="102" cy="75" r="3"/><circle cx="151" cy="56" r="3"/><circle cx="200" cy="50" r="3"/></g>
+          <circle cx="52" cy="88" r="4" fill="#fff" stroke="#5C6B85" stroke-width="2.5"/>
+          <circle cx="250" cy="48" r="9" fill="#2B44C7" opacity="0.15"/>
+          <circle cx="250" cy="48" r="4.5" fill="#2B44C7"/>
+          <g font-family="JetBrains Mono" font-size="9.5" fill="#5C6B85" text-anchor="middle">
+            <text x="52" y="140">Сен</text><text x="102" y="140">Ноя</text><text x="151" y="140">Янв</text><text x="200" y="140">Мар</text><text x="250" y="140">Май</text>
+          </g>
+        </svg>
+        <div class="jump"><span class="from">34</span><span class="arrow">→</span><span class="to">72</span></div>
+        <p class="meta">Георгий · подготовка с 10 класса</p>
+      </div>
+      <!-- кейс 2 -->
+      <div class="case reveal">
+        <div class="ctype">ОГЭ · 9 класс</div>
+        <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg" aria-label="Рост с 6 до 22 баллов по месяцам">
+          <g stroke="#EAF0F9" stroke-width="1">
+            <line x1="34" y1="97.5" x2="262" y2="97.5"/>
+            <line x1="34" y1="71"   x2="262" y2="71"/>
+            <line x1="34" y1="44.5" x2="262" y2="44.5"/>
+          </g>
+          <g stroke="#C6D5EE" stroke-width="1.5">
+            <line x1="34" y1="18" x2="34" y2="124"/>
+            <line x1="34" y1="124" x2="262" y2="124"/>
+          </g>
+          <path d="M52 103 L102 86 L151 73 L200 59 L250 49 L250 124 L52 124 Z" fill="#2B44C7" opacity="0.08"/>
+          <polyline points="52,103 102,86 151,73 200,59 250,49" fill="none" stroke="#2B44C7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#2B44C7"><circle cx="102" cy="86" r="3"/><circle cx="151" cy="73" r="3"/><circle cx="200" cy="59" r="3"/></g>
+          <circle cx="52" cy="103" r="4" fill="#fff" stroke="#5C6B85" stroke-width="2.5"/>
+          <circle cx="250" cy="49" r="9" fill="#2B44C7" opacity="0.15"/>
+          <circle cx="250" cy="49" r="4.5" fill="#2B44C7"/>
+          <g font-family="JetBrains Mono" font-size="9.5" fill="#5C6B85" text-anchor="middle">
+            <text x="52" y="140">Сен</text><text x="102" y="140">Ноя</text><text x="151" y="140">Янв</text><text x="200" y="140">Мар</text><text x="250" y="140">Май</text>
+          </g>
+        </svg>
+        <div class="jump"><span class="from">6</span><span class="arrow">→</span><span class="to">22</span></div>
+        <p class="meta">Анастасия · из 31 · итоговая оценка 5</p>
+      </div>
+    </div>
+    <p class="note-inline">Каждый результат — от входной до итоговой диагностики. Промежуточные точки по месяцам.</p>
+  </div>
+</section>
+
+<!-- ЦЕНЫ -->
+<section id="prices">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Форматы и цены</span>
+      <h2>Выберите формат под бюджет и цель</h2>
+      <p>После оплаты присылаю чек. Выгоднее всего заниматься по абонементу на месяц.</p>
+    </div>
+    <div class="prices">
+      <div class="price reveal">
+        <span class="plan">Индивидуально</span>
+        <div class="amount">1200 ₽</div>
+        <div class="price-sub">за академический час (45 мин)</div>
+        <ul>
+          <li>Программа полностью под одного ученика</li>
+          <li>Гибкий график занятий</li>
+          <li>Проверка домашних заданий</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Записаться</a>
+      </div>
+      <div class="price feat reveal">
+        <span class="plan">Абонемент · месяц</span>
+        <div class="amount"><span class="old">9600 ₽</span>8000 ₽</div>
+        <div class="price-sub">8 занятий · 1000 ₽ за занятие (вместо 1200)</div>
+        <ul>
+          <li>Фиксированное место в расписании</li>
+          <li>Меньше цена за занятие</li>
+          <li>Материалы и пробники включены</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Выбрать абонемент</a>
+      </div>
+      <div class="price reveal">
+        <span class="plan">Мини-группа</span>
+        <div class="amount">700 ₽</div>
+        <div class="price-sub">за занятие · группа до 4 человек</div>
+        <ul>
+          <li>Единая программа и темп</li>
+          <li>Цена ниже индивидуальной</li>
+          <li>Набор групп — в августе</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Записаться в группу</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КАК ПРОХОДИТ -->
+<section id="how" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Как проходит подготовка</span>
+      <h2>Понятный маршрут от первой встречи до экзамена</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="no">01</div><div class="bar"></div>
+        <h4>Диагностика</h4>
+        <p>Прогоняю ученика по варианту, нахожу пробелы и определяю цель по баллам.</p>
+      </div>
+      <div class="step reveal">
+        <div class="no">02</div><div class="bar"></div>
+        <h4>План</h4>
+        <p>Составляю карту подготовки до экзамена: что и в какие сроки разбираем.</p>
+      </div>
+      <div class="step reveal">
+        <div class="no">03</div><div class="bar"></div>
+        <h4>Подготовка</h4>
+        <p>Занятия, домашние задания и регулярные пробники с разбором ошибок.</p>
+      </div>
+      <div class="step reveal">
+        <div class="no">04</div><div class="bar"></div>
+        <h4>Экзамен</h4>
+        <p>Выходим на нужный балл уверенно и без паники в день экзамена.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ОБО МНЕ -->
+<section id="about">
+  <div class="wrap about">
+    <div class="about-card reveal">
+      <div class="row"><span>Опыт</span><span>4 года</span></div>
+      <div class="row stack"><span>Образование</span><span>Казанский федеральный университет (КФУ) · прикладная математика и информатика</span></div>
+      <div class="row"><span>Формат</span><span>онлайн</span></div>
+      <div class="row"><span>Учеников за год</span><span>40+</span></div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Обо мне</span>
+      <h2>Роман, репетитор по математике</h2>
+      <p>Окончил Казанский федеральный университет (КФУ) по специальности «Прикладная математика и информатика». Преподаю математику 4 года и готовлю школьников к ОГЭ и ЕГЭ.</p>
+      <p>Работаю онлайн и с любого уровня — от «ничего не понимаю» до «нужен высокий балл». Сначала разбираемся, где именно пробелы, дальше идём по понятному плану: теория, разбор задач и регулярные пробники, чтобы на экзамене не было неожиданностей.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ФИНАЛЬНЫЙ CTA -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <div class="final-card reveal">
+      <h2>Начнём с <span class="hl">диагностики</span>?</h2>
+      <p>Определим текущий уровень и цель по баллам, а вы получите честный план подготовки до экзамена.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a href="https://t.me/bukharov_math" class="btn btn-primary">Написать в Telegram</a>
+        <a href="tel:+79003280121" class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.3)">Позвонить: +7 900 328-01-21</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand"><div class="monogram">f(x)</div><span>Роман Бухаров</span></div>
+    <div class="legal">© 2026</div>
+  </div>
+</footer>
+
+<script>
+  // мягкое появление секций при скролле (с учётом prefers-reduced-motion)
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
